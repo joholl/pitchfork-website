@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Generate index.html
+      run: curl https://api.csswg.org/bikeshed/ -F url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs > index.html
+
+    - name: Deploy changes
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
